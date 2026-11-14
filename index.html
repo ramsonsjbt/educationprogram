@@ -1,1 +1,99 @@
-Selamat Datang di website Ramson Sijabat
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Kecerdasan Artifisial</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--violet:#7c3aed;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--good:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#e0f2fe,#ede9fe);color:var(--ink);min-height:100vh;padding:28px 16px}
+.shell{max-width:850px;margin:auto}.hero{background:linear-gradient(120deg,#172554,#4338ca 65%,#7c3aed);color:white;padding:30px;border-radius:22px;box-shadow:0 15px 35px #312e8130}
+.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.8;font-weight:700}.hero h1{margin:10px 0;font-size:clamp(28px,5vw,42px)}.hero p{margin:0;line-height:1.6;color:#e0e7ff;max-width:650px}
+.panel{background:white;border:1px solid #ffffffaa;border-radius:20px;padding:26px;margin-top:18px;box-shadow:0 12px 30px #1e293b12}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.pill{background:#eef2ff;color:#3730a3;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:700}
+button{border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:15px;cursor:pointer;transition:.2s}
+button:focus-visible,.option:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}
+.primary{background:linear-gradient(100deg,var(--blue),var(--violet));color:white}.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}.secondary{background:#eef2ff;color:#3730a3}.muted{color:var(--muted)}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:14px;color:var(--muted);font-weight:700}
+.track{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:12px 0 24px}.fill{height:100%;width:0;background:linear-gradient(90deg,#2563eb,#8b5cf6);transition:width .3s}
+.question{font-size:22px;line-height:1.4;margin:8px 0 20px}.options{display:grid;gap:11px}.option{width:100%;text-align:left;background:#f8fafc;border:1.5px solid var(--line);color:var(--ink);padding:15px;border-radius:13px;display:flex;gap:12px;align-items:flex-start;line-height:1.45}.option:hover:not(:disabled){border-color:#818cf8;background:#eef2ff}.letter{width:28px;height:28px;flex:0 0 28px;border-radius:9px;background:#e0e7ff;color:#3730a3;display:grid;place-items:center;font-weight:800}.option.correct{border-color:#22c55e;background:#f0fdf4}.option.wrong{border-color:#ef4444;background:#fef2f2}.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;line-height:1.55;display:none}.feedback.show{display:block}.feedback.good{background:#f0fdf4;color:#166534}.feedback.bad{background:#fef2f2;color:#991b1b}
+.actions{display:flex;justify-content:space-between;gap:12px;margin-top:22px}.hidden{display:none!important}.result{text-align:center}.score{font-size:58px;font-weight:900;color:#4338ca;margin:8px}.result h2{margin-bottom:5px}.review{margin-top:20px;text-align:left}.review details{border:1px solid var(--line);padding:13px;border-radius:12px;margin:9px 0}.review summary{font-weight:700;cursor:pointer}.footer{text-align:center;color:#64748b;font-size:12px;margin:20px 0}
+@media(max-width:560px){body{padding:14px 10px}.hero,.panel{padding:21px}.actions{flex-direction:column}.actions button{width:100%}.question{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="hero">
+  <div class="eyebrow">Informatika • Kuis Interaktif</div>
+  <h1>Seberapa Kenal Kamu dengan AI?</h1>
+  <p>Uji pemahamanmu tentang Artificial Intelligence (Kecerdasan Artifisial), cara kerjanya, contoh penerapan, serta penggunaan AI secara bijak dan bertanggung jawab.</p>
+</header>
+
+<section class="panel" id="intro">
+  <h2>Selamat datang!</h2>
+  <p class="muted">Kuis ini ditujukan sebagai latihan materi Kecerdasan Artifisial untuk peserta didik SMP. Bacalah setiap soal dengan teliti, lalu pilih satu jawaban yang paling tepat.</p>
+  <div class="meta"><span class="pill">10 Soal Pilihan Ganda</span><span class="pill">Skor Otomatis</span><span class="pill">Umpan Balik Langsung</span></div>
+  <p><strong>Petunjuk:</strong></p>
+  <ul class="muted"><li>Pilih satu jawaban untuk setiap pertanyaan.</li><li>Setelah menjawab, baca penjelasan yang muncul.</li><li>Tekan tombol “Soal Berikutnya” untuk melanjutkan.</li><li>Nilai akhir ditampilkan setelah seluruh soal selesai.</li></ul>
+  <button class="primary" id="startBtn">Mulai Kuis <span aria-hidden="true">→</span></button>
+</section>
+
+<section class="panel hidden" id="quiz" aria-live="polite">
+  <div class="topline"><span id="counter">Soal 1 dari 10</span><span id="scoreLive">Skor: 0</span></div>
+  <div class="track"><div class="fill" id="progress"></div></div>
+  <div class="muted" id="topic">Konsep Dasar AI</div>
+  <h2 class="question" id="question"></h2>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback" role="status"></div>
+  <div class="actions"><button class="secondary" id="quitBtn">Akhiri Kuis</button><button class="primary" id="nextBtn" disabled>Soal Berikutnya →</button></div>
+</section>
+
+<section class="panel result hidden" id="result">
+  <div class="eyebrow" style="color:#6366f1">Hasil Kuis</div>
+  <h2 id="resultTitle">Kuis selesai!</h2>
+  <div class="score" id="finalScore">0/100</div>
+  <p id="resultMessage" class="muted"></p>
+  <p><strong id="correctCount"></strong></p>
+  <button class="primary" id="restartBtn">Ulangi Kuis ↻</button>
+  <div class="review" id="review"><h3>Pembahasan Jawaban</h3></div>
+</section>
+<div class="footer">Media latihan Informatika • Kecerdasan Artifisial</div>
+</div>
+<script>
+const questions = [
+ {topic:"Konsep Dasar AI",q:"Apa yang dimaksud dengan Artificial Intelligence (AI) atau Kecerdasan Artifisial?",o:["Teknologi yang membuat komputer mampu melakukan tugas yang biasanya membutuhkan kecerdasan manusia","Perangkat untuk mempercepat koneksi internet","Program yang hanya digunakan untuk mengetik dokumen","Mesin yang selalu dapat berpikir dan memiliki perasaan seperti manusia"],a:0,e:"AI adalah teknologi yang memungkinkan sistem komputer melakukan tugas seperti mengenali pola, memahami bahasa, membuat prediksi, atau membantu mengambil keputusan. AI tidak berarti mesin memiliki perasaan seperti manusia."},
+ {topic:"Contoh Penerapan AI",q:"Ketika aplikasi peta menyarankan rute tercepat berdasarkan kondisi lalu lintas, teknologi yang dimanfaatkan adalah ...",o:["Pengolah kata","Kecerdasan Artifisial","Kalkulator sederhana","Perangkat penyimpanan"],a:1,e:"Aplikasi peta dapat menganalisis data lokasi dan kondisi lalu lintas untuk memperkirakan rute yang efisien. Analisis dan prediksi tersebut dapat memanfaatkan AI."},
+ {topic:"Cara Kerja AI",q:"Dalam proses machine learning, apa yang umumnya digunakan sistem AI untuk mempelajari pola?",o:["Data dan contoh","Warna layar monitor","Ukuran papan ketik","Kabel jaringan saja"],a:0,e:"Machine learning mempelajari pola dari data. Kualitas dan keberagaman data dapat memengaruhi hasil yang dihasilkan model."},
+ {topic:"AI dalam Kehidupan",q:"Fitur pengenalan wajah pada telepon pintar merupakan contoh AI yang digunakan untuk ...",o:["Mengubah baterai menjadi lebih besar","Mengenali ciri atau pola wajah","Memperbaiki layar yang retak","Menambah kapasitas memori fisik"],a:1,e:"Sistem pengenalan wajah menganalisis karakteristik wajah dari gambar atau sensor, kemudian membandingkannya dengan pola yang tersimpan."},
+ {topic:"Generative AI",q:"Manakah contoh penggunaan Generative AI?",o:["Membuat draf cerita atau gambar berdasarkan instruksi pengguna","Mengisi daya baterai telepon","Menghubungkan kabel ke stopkontak","Mengukur panjang meja dengan penggaris"],a:0,e:"Generative AI dapat menghasilkan konten baru, seperti teks, gambar, audio, atau kode, berdasarkan pola yang dipelajari dan instruksi pengguna."},
+ {topic:"Berpikir Kritis",q:"Kamu memperoleh jawaban tugas dari chatbot AI. Apa tindakan paling tepat sebelum menggunakannya?",o:["Langsung menyalin seluruh jawaban","Menganggap semua jawaban AI pasti benar","Memeriksa fakta melalui sumber tepercaya dan memahami isinya","Menghapus nama sumber agar terlihat sebagai karya sendiri"],a:2,e:"AI dapat menghasilkan informasi yang keliru atau tidak lengkap. Pengguna perlu memeriksa fakta, membandingkan sumber, dan tetap memahami materi."},
+ {topic:"Etika dan Privasi",q:"Informasi manakah yang sebaiknya tidak dimasukkan ke chatbot AI publik tanpa alasan dan perlindungan yang jelas?",o:["Pertanyaan umum tentang tata surya","Data pribadi seperti kata sandi dan nomor identitas","Permintaan ide membuat poster kebersihan","Pertanyaan tentang pengertian algoritma"],a:1,e:"Kata sandi, nomor identitas, alamat pribadi, dan data sensitif lainnya harus dilindungi. Jangan membagikannya ke layanan AI publik."},
+ {topic:"Bias AI",q:"Sebuah sistem AI memberikan hasil yang tidak adil karena data latihnya lebih banyak mewakili kelompok tertentu. Masalah ini disebut ...",o:["Resolusi","Kompresi","Bias algoritma atau bias data","Pemformatan"],a:2,e:"Bias AI dapat muncul ketika data atau proses perancangan tidak mewakili kondisi secara seimbang. Hasilnya berpotensi merugikan kelompok tertentu."},
+ {topic:"Peran Manusia",q:"Mengapa keputusan penting, misalnya terkait kesehatan atau keselamatan, tidak sebaiknya diserahkan sepenuhnya kepada AI?",o:["AI tidak pernah dapat mengolah data","AI selalu bekerja tanpa listrik","AI dapat keliru dan tidak menggantikan pertimbangan serta tanggung jawab manusia","AI hanya bisa digunakan pada malam hari"],a:2,e:"AI adalah alat bantu. Keputusan penting memerlukan pemeriksaan, konteks, empati, dan tanggung jawab manusia atau tenaga profesional yang berwenang."},
+ {topic:"Pemanfaatan Bertanggung Jawab",q:"Cara paling tepat menggunakan AI untuk membantu belajar adalah ...",o:["Meminta AI mengerjakan semua tugas lalu mengakuinya sebagai karya sendiri","Menggunakan AI untuk mencari penjelasan, menguji pemahaman, lalu menyusun jawaban sendiri","Memasukkan data pribadi teman agar jawaban lebih lengkap","Mempercayai semua hasil AI tanpa pemeriksaan"],a:1,e:"AI dapat menjadi teman belajar untuk menjelaskan konsep atau memberi latihan. Gunakan secara jujur, kritis, dan tetap hasilkan karya berdasarkan pemahaman sendiri."}
+];
+let index=0,score=0,answers=[];
+const $=id=>document.getElementById(id);
+function start(){index=0;score=0;answers=[];$("intro").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");render()}
+function render(){
+ const item=questions[index];$("counter").textContent=`Soal ${index+1} dari ${questions.length}`;$("scoreLive").textContent=`Skor: ${score}`;$("progress").style.width=`${index/questions.length*100}%`;$("topic").textContent=item.topic;$("question").textContent=item.q;$("feedback").className="feedback";$("feedback").textContent="";$("nextBtn").disabled=true;$("nextBtn").textContent=index===questions.length-1?"Lihat Hasil":"Soal Berikutnya →";
+ $("options").innerHTML="";
+ item.o.forEach((option,i)=>{const b=document.createElement("button");b.className="option";b.innerHTML=`<span class="letter">${"ABCD"[i]}</span><span></span>`;b.querySelector("span:last-child").textContent=option;b.addEventListener("click",()=>choose(i));$("options").appendChild(b)});
+}
+function choose(choice){
+ const item=questions[index],buttons=[...$("options").children];buttons.forEach((b,i)=>{b.disabled=true;if(i===item.a)b.classList.add("correct");if(i===choice&&choice!==item.a)b.classList.add("wrong")});
+ const ok=choice===item.a;if(ok)score+=10;answers.push({choice,correct:ok});$("scoreLive").textContent=`Skor: ${score}`;$("progress").style.width=`${(index+1)/questions.length*100}%`;
+ $("feedback").className=`feedback show ${ok?"good":"bad"}`;$("feedback").innerHTML=`<strong>${ok?"Tepat!":"Belum tepat."}</strong> ${item.e}`;$("nextBtn").disabled=false;
+}
+function finish(){
+ $("quiz").classList.add("hidden");$("result").classList.remove("hidden");$("finalScore").textContent=`${score}/100`;
+ const correct=answers.filter(a=>a.correct).length;$("correctCount").textContent=`Jawaban benar: ${correct} dari ${questions.length} soal`;
+ $("resultTitle").textContent=score>=80?"Hebat! Pemahamanmu sangat baik.":score>=60?"Bagus! Terus tingkatkan pemahamanmu.":"Tetap semangat! Mari pelajari kembali materi AI.";
+ $("resultMessage").textContent=score>=80?"Kamu sudah memahami banyak konsep dasar AI. Pertahankan sikap kritis saat menggunakannya.":score>=60?"Kamu sudah menguasai beberapa konsep. Baca kembali pembahasan untuk memperkuat pemahaman.":"Jangan berkecil hati. Gunakan pembahasan berikut sebagai bahan belajar, lalu coba lagi.";
+ $("review").innerHTML="<h3>Pembahasan Jawaban</h3>";
+ questions.forEach((q,i)=>{const d=document.createElement("details");const s=document.createElement("summary");s.textContent=`${i+1}. ${q.q} ${answers[i].correct?"✓":"✗"}`;const p=document.createElement("p");p.className="muted";p.textContent=`Jawaban benar: ${"ABCD"[q.a]}. ${q.o[q.a]} — ${q.e}`;d.append(s,p);$("review").appendChild(d)});
+}
+$("startBtn").onclick=start;$("nextBtn").onclick=()=>{if(index<questions.length-1){index++;render()}else finish()};$("restartBtn").onclick=start;$("quitBtn").onclick=()=>{if(confirm("Akhiri kuis dan lihat hasil sementara?"))finish()};
+</script>
+</body>
+</html>
