@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorium Struktur Data | Tree & Graph</title>
+<style>
+:root{--bg:#071326;--panel:#101f38;--panel2:#142846;--line:#294365;--text:#edf5ff;--muted:#a9bdd8;--cyan:#52e3e5;--blue:#69a7ff;--pink:#ff75b7;--gold:#ffd166;--green:#70e1a1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0%,#173967 0,transparent 32%),radial-gradient(circle at 90% 10%,#34235f 0,transparent 28%),var(--bg);color:var(--text);font:15px/1.55 Inter,Segoe UI,Arial,sans-serif}
+header{padding:28px clamp(18px,4vw,56px) 22px;border-bottom:1px solid #294365;background:#08162bcc;backdrop-filter:blur(12px)}
+.kicker{color:var(--cyan);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+h1{font-size:clamp(27px,4vw,43px);line-height:1.1;margin:8px 0;color:#fff}header p{color:var(--muted);margin:10px 0 0;max-width:780px}
+main{max-width:1440px;margin:auto;padding:24px clamp(14px,3vw,40px) 50px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tab,.btn,select,input{font:inherit;border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--text);background:#10233d}
+.tab{cursor:pointer;font-weight:750}.tab.active{background:linear-gradient(110deg,#147f91,#365fb7);border-color:#62dce8;box-shadow:0 7px 25px #21c7dc30}
+.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.8fr);gap:18px}
+.panel{background:linear-gradient(145deg,#11233dF2,#0c1b30F2);border:1px solid var(--line);border-radius:19px;padding:19px;box-shadow:0 15px 45px #0003}
+.panel h2{margin:0 0 5px;font-size:20px}.sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+.stage{height:430px;position:relative;overflow:hidden;border-radius:15px;background:radial-gradient(ellipse at 50% 45%,#19395d 0,#0a192d 70%);border:1px solid #294b70}
+.stage:after{content:"";position:absolute;inset:0;background-image:linear-gradient(#4a77a31b 1px,transparent 1px),linear-gradient(90deg,#4a77a31b 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+svg{width:100%;height:100%;position:relative;z-index:1}
+.edge{stroke:#6583a8;stroke-width:2.5;fill:none;opacity:.9;transition:stroke .3s,stroke-width .3s}.edge.active{stroke:var(--gold);stroke-width:4;filter:drop-shadow(0 0 6px #ffd166)}
+.node circle{fill:#163b60;stroke:var(--cyan);stroke-width:2.5;filter:drop-shadow(0 4px 9px #0008);transition:all .25s}.node text{fill:#fff;font-weight:800;font-size:14px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.node.active circle{fill:#a45c16;stroke:var(--gold);stroke-width:4;filter:drop-shadow(0 0 12px #ffd166aa);animation:pulse 1s infinite}.node.visited circle{fill:#155b55;stroke:var(--green)}
+.node{cursor:pointer}.node:hover circle{stroke:var(--pink);stroke-width:4}
+@keyframes pulse{50%{r:24;filter:drop-shadow(0 0 17px #ffd166)}}
+.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px;align-items:center}.btn{cursor:pointer;font-weight:700;transition:.2s}.btn:hover{transform:translateY(-2px);border-color:var(--cyan);background:#1b385a}.btn.primary{background:linear-gradient(110deg,#087e91,#315fbd);border:0}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.field{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:13px}.field input{width:100px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.stat{background:#0a192d;border:1px solid #203a5b;border-radius:12px;padding:11px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:19px;color:var(--cyan)}
+.side-section{padding:13px 0;border-bottom:1px solid #263e5c}.side-section:last-child{border:0}.side-section h3{margin:0 0 8px;font-size:15px;color:#d9eaff}
+.explain{color:var(--muted);font-size:13px}.pill{display:inline-block;padding:3px 9px;border-radius:99px;background:#153b51;color:var(--cyan);font-size:11px;font-weight:800;margin:3px 4px 3px 0}
+.log{height:112px;overflow:auto;background:#081629;border:1px solid #203a5b;border-radius:11px;padding:10px;color:#bdd0e8;font:12px/1.6 ui-monospace,monospace}
+.quiz{margin-top:18px}.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}.quiz-options button{text-align:left}.feedback{min-height:24px;color:var(--gold);font-weight:700;margin-top:8px}
+.graph-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}.graph-tools select{max-width:150px}
+.legend{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--cyan)}
+footer{text-align:center;color:#7892b3;font-size:12px;padding:24px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.stage{height:380px}}@media(max-width:520px){.stage{height:330px}.quiz-options{grid-template-columns:1fr}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="kicker">Laboratorium Informatika • Simulasi Interaktif</div><h1>Struktur Data: Tree &amp; Graph</h1><p>Jelajahi cara data disusun dan saling terhubung. Klik simpul, jalankan traversal, ubah struktur, lalu uji pemahaman melalui kuis singkat.</p></header>
+<main>
+<div class="tabs"><button class="tab active" data-mode="tree">🌳 Simulasi Tree</button><button class="tab" data-mode="graph">🕸️ Simulasi Graph</button></div>
+<div class="layout">
+<section class="panel">
+<h2 id="visualTitle">Binary Tree</h2><p class="sub" id="visualSub">Struktur hierarkis: satu root dapat memiliki anak kiri dan anak kanan.</p>
+<div id="graphTools" class="graph-tools" hidden>
+<label class="field">Algoritma <select id="algo"><option value="bfs">BFS (Breadth-First)</option><option value="dfs">DFS (Depth-First)</option></select></label>
+<label class="field">Dari <select id="startNode"><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></label>
+<button class="btn primary" id="runGraph">▶ Jelajahi Graph</button><button class="btn" id="resetGraph">Reset</button>
+</div>
+<div class="stage"><svg id="scene" viewBox="0 0 760 430" role="img" aria-label="Visualisasi struktur data"></svg></div>
+<div class="controls" id="treeControls">
+<label class="field">Nilai node <input id="nodeValue" type="text" maxlength="4" placeholder="mis. G"></label>
+<button class="btn primary" id="addNode">＋ Tambah anak</button><button class="btn" id="removeNode">− Hapus terpilih</button><button class="btn" id="resetTree">Kembali ke awal</button>
+</div>
+<div class="controls" id="traversalControls">
+<button class="btn primary" id="preorder">Preorder</button><button class="btn" id="inorder">Inorder</button><button class="btn" id="postorder">Postorder</button><button class="btn" id="levelorder">Level-order</button><button class="btn" id="stop">■ Hentikan</button>
+</div>
+<div class="info-grid"><div class="stat"><small>Simpul (Vertex / Node)</small><strong id="nodeCount">7</strong></div><div class="stat"><small>Sisi (Edge)</small><strong id="edgeCount">6</strong></div><div class="stat"><small>Node dipilih</small><strong id="selectedNode">A</strong></div><div class="stat"><small>Urutan kunjungan</small><strong id="visitCount">0</strong></div></div>
+<div class="legend"><span><i class="dot"></i>Node biasa</span><span><i class="dot" style="background:#70e1a1"></i>Sudah dikunjungi</span><span><i class="dot" style="background:#ffd166"></i>Sedang aktif</span></div>
+</section>
+<aside class="panel">
+<div class="side-section"><h2>📘 Konsep inti</h2><div id="concept" class="explain">Tree adalah struktur data non-linear yang menyusun elemen secara hierarkis. Node paling atas disebut root, sedangkan node tanpa anak disebut leaf.</div></div>
+<div class="side-section"><h3>Istilah penting</h3><div id="terms"><span class="pill">Root</span><span class="pill">Parent</span><span class="pill">Child</span><span class="pill">Leaf</span><span class="pill">Subtree</span><span class="pill">Height</span></div></div>
+<div class="side-section"><h3>🧭 Aktivitas / Log</h3><div class="log" id="log">[Sistem] Simulasi siap. Pilih node untuk melihat detailnya.</div></div>
+<div class="side-section"><h3>💡 Contoh dalam kehidupan</h3><p id="example" class="explain">Struktur folder komputer: folder utama memiliki subfolder dan file di bawahnya. Susunannya membentuk hierarki seperti tree.</p></div>
+<div class="side-section quiz"><h3>🎯 Cek pemahaman</h3><p id="question" class="explain">Pada binary tree, berapa jumlah maksimum anak yang dapat dimiliki satu node?</p><div class="quiz-options" id="answers"><button class="btn" data-answer="1">1 anak</button><button class="btn" data-answer="2">2 anak</button><button class="btn" data-answer="3">3 anak</button><button class="btn" data-answer="4">Tidak terbatas</button></div><div class="feedback" id="feedback"></div></div>
+</aside>
+</div>
+</main><footer>Laboratorium Struktur Data • Media pembelajaran Informatika • Berjalan langsung di browser, tanpa instalasi</footer>
+<script>
+const $=id=>document.getElementById(id);
+let mode='tree', selected='A', timer=null, visited=[], graphVisited=[];
+const initialTree={A:{l:'B',r:'C'},B:{l:'D',r:'E'},C:{l:'F',r:'G'},D:{},E:{},F:{},G:{}};
+let tree=JSON.parse(JSON.stringify(initialTree));
+const graph={A:['B','C'],B:['A','D','E'],C:['A','E','F'],D:['B','E'],E:['B','C','D','F'],F:['C','E']};
+const positions={A:[380,65],B:[210,170],C:[550,170],D:[115,300],E:[305,300],F:[475,300],G:[645,300]};
+const graphPos={A:[380,75],B:[190,175],C:[570,175],D:[125,340],E:[380,340],F:[635,340]};
+function log(s){$('log').innerHTML+=`<br>${s}`;$('log').scrollTop=$('log').scrollHeight}
+function setCounts(){let n=mode==='tree'?Object.keys(tree).length:Object.keys(graph).length;let e=mode==='tree'?n-1:Object.values(graph).reduce((a,b)=>a+b.length,0)/2;$('nodeCount').textContent=n;$('edgeCount').textContent=e;$('selectedNode').textContent=selected;$('visitCount').textContent=visited.length}
+function draw(){
+ const svg=$('scene');svg.innerHTML='';
+ const pos=mode==='tree'?positions:graphPos;
+ const edges=[];
+ if(mode==='tree'){for(let [p,ch] of Object.entries(tree)){['l','r'].forEach(k=>{if(ch[k])edges.push([p,ch[k]])})}}
+ else {for(let [p,ns] of Object.entries(graph))ns.forEach(c=>{if(p<c)edges.push([p,c])})}
+ edges.forEach(([a,b])=>{let [x1,y1]=pos[a],[x2,y2]=pos[b];if(!x1||!x2)return;let line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',x1);line.setAttribute('y1',y1+20);line.setAttribute('x2',x2);line.setAttribute('y2',y2-20);line.setAttribute('class','edge');line.dataset.edge=a+'-'+b;svg.append(line)});
+ Object.keys(pos).filter(k=>mode==='tree'?tree[k]:graph[k]).forEach(k=>{let [x,y]=pos[k],g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','node'+(k===selected?' active':'')+(visited.includes(k)?' visited':''));g.setAttribute('transform',`translate(${x},${y})`);g.innerHTML=`<circle r="21"></circle><text y="1">${k}</text>`;g.addEventListener('click',()=>select(k));svg.append(g)});
+ setCounts();
+}
+function select(k){selected=k;draw();$('selectedNode').textContent=k;if(mode==='tree'){let t=tree[k],children=[t.l,t.r].filter(Boolean);log(`[Pilih] ${k}: ${children.length?`anak ${children.join(', ')}`:'leaf (tidak memiliki anak)'}`)}else log(`[Pilih] Vertex ${k} terhubung ke: ${graph[k].join(', ')}`)}
+function treeWalk(type){let out=[];function rec(n){if(!n)return;if(type==='pre')out.push(n);rec(tree[n].l);if(type==='in')out.push(n);rec(tree[n].r);if(type==='post')out.push(n)}if(type==='level'){let q=['A'];while(q.length){let n=q.shift();out.push(n);[tree[n].l,tree[n].r].filter(Boolean).forEach(x=>q.push(x))}}else rec('A');return out}
+function animate(list){clearInterval(timer);visited=[];let i=0;log(`[Mulai] Urutan: ${list.join(' → ')}`);timer=setInterval(()=>{if(i>=list.length){clearInterval(timer);timer=null;log('[Selesai] Traversal selesai.');return}selected=list[i];visited.push(list[i]);draw();i++},650)}
+$('preorder').onclick=()=>animate(treeWalk('pre'));$('inorder').onclick=()=>animate(treeWalk('in'));$('postorder').onclick=()=>animate(treeWalk('post'));$('levelorder').onclick=()=>animate(treeWalk('level'));
+$('stop').onclick=()=>{clearInterval(timer);timer=null;log('[Sistem] Animasi dihentikan.')};
+$('addNode').onclick=()=>{let v=$('nodeValue').value.trim().toUpperCase();if(!v||tree[v]){log('[Peringatan] Isi nilai unik untuk node baru.');return}let p=tree[selected];if(!p){return}let side=!p.l?'l':!p.r?'r':null;if(!side){log('[Peringatan] Node ini sudah memiliki dua anak. Pilih node lain.');return}tree[v]={};p[side]=v;positions[v]=side==='l'?[positions[selected][0]-75,positions[selected][1]+115]:[positions[selected][0]+75,positions[selected][1]+115];$('nodeValue').value='';log(`[Tambah] ${v} menjadi anak ${side==='l'?'kiri':'kanan'} dari ${selected}.`);select(v)};
+$('removeNode').onclick=()=>{if(selected==='A'){log('[Peringatan] Root tidak dapat dihapus dari simulasi ini.');return}let parent=Object.keys(tree).find(p=>tree[p].l===selected||tree[p].r===selected);if(parent){if(tree[parent].l===selected)tree[parent].l=null;else tree[parent].r=null}function del(n){if(!n)return;let a=tree[n];del(a.l);del(a.r);delete tree[n]}del(selected);selected=parent||'A';visited=[];draw();log(`[Hapus] Node dan subtree yang berada di bawahnya dihapus.`)};
+$('resetTree').onclick=()=>{tree=JSON.parse(JSON.stringify(initialTree));selected='A';visited=[];draw();log('[Sistem] Tree dikembalikan ke bentuk awal.')};
+function graphWalk(start,algo){let seen=new Set(),out=[];if(algo==='bfs'){let q=[start];seen.add(start);while(q.length){let n=q.shift();out.push(n);graph[n].forEach(x=>{if(!seen.has(x)){seen.add(x);q.push(x)}})}}else{function dfs(n){seen.add(n);out.push(n);graph[n].forEach(x=>{if(!seen.has(x))dfs(x)})}dfs(start)}return out}
+$('runGraph').onclick=()=>animate(graphWalk($('startNode').value,$('algo').value));$('resetGraph').onclick=()=>{visited=[];selected='A';draw();log('[Sistem] Graph direset.')};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{clearInterval(timer);timer=null;mode=b.dataset.mode;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));$('treeControls').hidden=mode!=='tree';$('traversalControls').hidden=mode!=='tree';$('graphTools').hidden=mode!=='graph';if(mode==='tree'){$('visualTitle').textContent='Binary Tree';$('visualSub').textContent='Struktur hierarkis: satu root dapat memiliki anak kiri dan anak kanan.';$('concept').textContent='Tree adalah struktur data non-linear yang menyusun elemen secara hierarkis. Node paling atas disebut root, sedangkan node tanpa anak disebut leaf.';$('terms').innerHTML='<span class="pill">Root</span><span class="pill">Parent</span><span class="pill">Child</span><span class="pill">Leaf</span><span class="pill">Subtree</span><span class="pill">Height</span>';$('example').textContent='Struktur folder komputer: folder utama memiliki subfolder dan file di bawahnya. Susunannya membentuk hierarki seperti tree.';selected='A'}else{$('visualTitle').textContent='Graph (Undirected)';$('visualSub').textContent='Relasi antarvertex: setiap sisi menunjukkan hubungan atau koneksi.';$('concept').textContent='Graph terdiri dari vertex (simpul) dan edge (sisi). Graph dapat memiliki banyak jalur, siklus, dan tidak harus memiliki root. Pada contoh ini, sisi tidak memiliki arah (undirected).';$('terms').innerHTML='<span class="pill">Vertex</span><span class="pill">Edge</span><span class="pill">Degree</span><span class="pill">Path</span><span class="pill">Cycle</span><span class="pill">Connected</span>';$('example').textContent='Peta jalan: persimpangan menjadi vertex dan ruas jalan menjadi edge. Satu lokasi dapat terhubung ke beberapa lokasi lain.';selected='A'}visited=[];draw()});
+const quiz=[{q:'Pada binary tree, berapa jumlah maksimum anak yang dapat dimiliki satu node?',a:['1 anak','2 anak','3 anak','Tidak terbatas'],c:1,e:'Benar! Binary tree membatasi setiap node memiliki maksimal dua anak.'},{q:'Node paling atas pada struktur tree disebut ...',a:['Leaf','Root','Edge','Sibling'],c:1,e:'Root adalah node awal atau paling atas dalam tree.'},{q:'Dalam graph, istilah untuk garis penghubung antarvertex adalah ...',a:['Root','Level','Edge','Leaf'],c:2,e:'Edge merepresentasikan hubungan antarvertex.'},{q:'Algoritma BFS mengunjungi vertex berdasarkan ...',a:['Kedalaman dahulu','Urutan alfabet saja','Level/jarak terdekat dahulu','Nilai terbesar'],c:2,e:'BFS menjelajahi tetangga terdekat terlebih dahulu menggunakan antrean.'}];let qi=0;
+function loadQuiz(){let q=quiz[qi];$('question').textContent=q.q;$('answers').innerHTML=q.a.map((x,i)=>`<button class="btn" data-answer="${i}">${x}</button>`).join('');$('feedback').textContent='';$('answers').querySelectorAll('button').forEach(b=>b.onclick=()=>{let ok=+b.dataset.answer===q.c;$('feedback').textContent=ok?'✓ '+q.e:'Belum tepat. Coba pikirkan kembali, lalu pilih jawaban lain.';if(ok){$('answers').querySelectorAll('button').forEach(x=>x.disabled=true);setTimeout(()=>{qi=(qi+1)%quiz.length;loadQuiz()},1700)}})}
+loadQuiz();draw();
+</script>
+</body></html>
